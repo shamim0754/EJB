@@ -10,7 +10,7 @@ EJB(Enterprise java bean) is a specification provided by Sun Microsystems to dev
 7. Messaging
 8. web services support.
 
-Some vendors are glashfish,Jboss,Weblogic,TomEE etc
+Some vendors are glashfish,Jboss,Weblogic,TomEE,WebSphere (IBM),WebLogic (BEA) etc
 
 ### Benefits of Enterprise Beans ###
 1. Since it is deployed on EJB container.EJB container provides above system-level services.developer can concentrate only develop business logic code
@@ -26,4 +26,15 @@ You should consider using enterprise beans if your application has any of the fo
 
 3. The application will have a variety of clients. With only a few lines of code, remote clients can easily locate enterprise beans. These clients can be thin, various, and numerous.
 
-   
+
+### EJB >3.0 vs EJB < 3.0  Version ###
+The development process of creating EJB between before 3.0 and after 3.0 are different.We need to understand difference between >3.0 and <3.0
+
+
+EJB < 3.0 | EJB >=3.0 
+------------ | -------------
+Configuration using programmatic and declarative(using confiquration file) |  Configruation using Annotaton ,and option delcarative way that that facilate quick development
+To create enterprise bean need to implement REMOTE,HOME,Local interface | Simple POJO based Bean
+Entity bean is used for persistence | JPA-java persistence api(replace on entity bean) is for persistence
+
+Access beans through JNDI lookup  | Access beans through dependency injection or JNDI lookup. 
