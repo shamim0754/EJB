@@ -36,5 +36,4 @@ EJB < 3.0 | EJB >=3.0
 Configuration using programmatic and declarative(using confiquration file) |  Configruation using Annotaton ,and option delcarative way that that facilate quick development
 To create enterprise bean need to implement REMOTE,HOME,Local interface | Simple POJO based Bean
 Entity bean is used for persistence | JPA-java persistence api(replace on entity bean) is for persistence
-
-Access beans through JNDI lookup  | Access beans through dependency injection or JNDI lookup. 
+Access beans through Only JNDI lookup  | Access beans through dependency injection using @EJB annotation or JNDI lookup. 
