@@ -35,5 +35,104 @@ EJB < 3.0 | EJB >=3.0
 ------------ | -------------
 Configuration using programmatic and declarative(using confiquration file) |  Configruation using Annotaton ,and option delcarative way that that facilate quick development
 To create enterprise bean need to implement REMOTE,HOME,Local interface | Simple POJO based Bean
-Entity bean is used for persistence | JPA-java persistence api(replace on entity bean) is for persistence
-Access beans through Only JNDI lookup  | Access beans through dependency injection using @EJB annotation or JNDI lookup. 
+Entity bean is used for persistence.it could be either CMP(COntainer managed persistence) or BMP(Bean managed persistence).BMP is programmatic | JPA-java persistence api(replace on entity bean) is for persistence
+Access beans through Only JNDI lookup  | Access beans either dependency injection using @EJB annotation or JNDI lookup. 
+
+### Types of Enterprise Beans ###
+
+### Types of Enterprise Beans ###
+
+EJB 3.0 defines two types of enterprise beans.
+
+1. Session Bean
+2. Message driven bean
+
+There was another bean before 3.0 called Entity Bean
+
+### Session Bean ###
+Session means short duration of time execute something.On otherhand it is not used for persistence.It encapsulates actual business logic like user authentication,credit card validation,shopping card etc
+
+### Steps to create a bean of before 2.0 style ###
+1. Create bean class with all of the business method
+2. Create two interface for the bean
+	1. Component Interface either local or remote
+	2. Home Interface
+
+
+3. Create an XML deployment descriptor that tells the server what your bean is and how it should be managed.File name must be ejb-jar.xml under META-INF
+4. Register the bean into JNDI . file name may be sun-ejb-jar.xml or EJB container specific file glassfish-ejb-jar.xml(glassfish),weblogic-ejb-jar.xml(Weblogic server) under META-INF
+5. Deploy the bean into server using tool provided by vendor
+
+### Example of Hello World EJB ###
+
+1. create maven java project by following command
+
+	`mvn archetype:generate -DgroupId=com.javaaround -DartifactId=EJB -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false` 
+
+	Add ejb jar dependency at pom.xml
+
+	```xml
+	<dependency>
+	    <groupId>javax</groupId>
+	    <artifactId>javaee-api</artifactId>
+	    <version>7.0</version>
+	</dependency>
+	```
+
+2. Create HelloWorldBean.java at com/javaaround/ejb
+
+	```java
+	package com.javaaround.ejb;
+	import javax.ejb.*;
+	import java.util.*;
+
+	public class HelloWorldBean implements SessionBean{
+		public String hello(){
+		     return "Hello World EJB";
+		}
+		public void ejbCreate() {
+
+		} 
+		public void ejbRemove() {
+
+		}
+		public void ejbActivate() {
+
+		}
+		public void ejbPassivate() {
+
+		}
+		public void setSessionContext(SessionContext sc){
+
+		}
+	}
+	```
+3. Create HelloWorldRemote.java at com/javaaround/ejb
+
+	```java
+	package com.javaaround.ejb;
+	import javax.ejb.*;
+	import java.rmi.*;
+	import java.util.*;
+	public interface HelloWorldRemote extends EJBObject{
+	   public String hello() throws RemoteException;
+	}
+	```
+
+	Create HelloWorldHome.java at com/javaaround/ejb
+
+	```java
+	package com.javaaround.ejb;
+
+	import javax.ejb.*;
+	import java.rmi.*;
+	public interface HelloWorldHome extends EJBHome{
+	   public HelloWorldRemote create() throws RemoteException,CreateException;
+	}
+	```
+
+### Types of Session Bean ###
+There are 3 types of session bean.
+1. Stateless Session Bean : 
+
+
