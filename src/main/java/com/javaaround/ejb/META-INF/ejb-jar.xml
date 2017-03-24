@@ -7,9 +7,9 @@
 	<enterprise-beans>
 		<session>
 			<ejb-name>helloWorldBean</ejb-name>
-			<home>demo.HelloWorldHome</home> 
-			<remote>demo.HelloWorldRemote</remote>
-			<ejb-class>demo.HelloWorldBean</ejb-class>
+			<home>com.javaaround.ejb.HelloWorldHome</home> 
+			<remote>com.javaaround.ejb.HelloWorldRemote</remote>
+			<ejb-class>com.javaaround.ejb.HelloWorldBean</ejb-class>
 			<session-type>Stateless</session-type>
 			<transaction-type>Container</transaction-type>
 		</session>

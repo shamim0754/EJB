@@ -38,7 +38,6 @@ To create enterprise bean need to implement REMOTE,HOME,Local interface | Simple
 Entity bean is used for persistence.it could be either CMP(COntainer managed persistence) or BMP(Bean managed persistence).BMP is programmatic | JPA-java persistence api(replace on entity bean) is for persistence
 Access beans through Only JNDI lookup  | Access beans either dependency injection using @EJB annotation or JNDI lookup. 
 
-### Types of Enterprise Beans ###
 
 ### Types of Enterprise Beans ###
 
@@ -69,7 +68,7 @@ Session means short duration of time execute something.On otherhand it is not us
 
 	`mvn archetype:generate -DgroupId=com.javaaround -DartifactId=EJB -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false` 
 
-	Add ejb jar dependency at pom.xml
+	Add javaee (include ejb jar) dependency at pom.xml
 
 	```xml
 	<dependency>
@@ -130,7 +129,41 @@ Session means short duration of time execute something.On otherhand it is not us
 	   public HelloWorldRemote create() throws RemoteException,CreateException;
 	}
 	```
+4. Create ejb-jar.xml at com/javaaround/ejb/META-INF
 
+	```xml
+	<?xml version="1.0"?>
+	<!DOCTYPE ejb-jar PUBLIC
+	"-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN"
+	"http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+
+	<ejb-jar>
+		<enterprise-beans>
+			<session>
+				<ejb-name>helloWorldBean</ejb-name>
+				<home>com.javaaround.ejb.HelloWorldHome</home> 
+				<remote>com.javaaround.ejb.HelloWorldRemote</remote>
+				<ejb-class>com.javaaround.ejb.HelloWorldBean</ejb-class>
+				<session-type>Stateless</session-type>
+				<transaction-type>Container</transaction-type>
+			</session>
+		</enterprise-beans>
+	</ejb-jar>
+	```
+5. Create sun-ejb-jar.xml at com/javaaround/ejb/META-INF
+
+	```xml
+	<!DOCTYPE sun-ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Application Server 9.0 EJB 2.0//EN" "http://www.sun.com/software/appserver/dtds/sun-ejb-jar_2_0-0.dtd">
+	<sun-ejb-jar>
+	    <display-name>First Module</display-name>
+	    <enterprise-beans>
+	        <ejb>
+	            <ejb-name>helloWorldBean</ejb-name>
+	            <jndi-name>helloworld</jndi-name>
+	        </ejb>
+	    </enterprise-beans>
+	</sun-ejb-jar>
+	```	
 ### Types of Session Bean ###
 There are 3 types of session bean.
 1. Stateless Session Bean : 
