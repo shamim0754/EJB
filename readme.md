@@ -70,7 +70,7 @@ Session means short duration of time execute something.On otherhand it is not us
 
 	`mvn archetype:generate -DgroupId=com.javaaround -DartifactId=EJB -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false` 
 
-	Add javaee (include ejb jar) dependency at pom.xml
+	Add javaee (include ejb jar here) dependency at pom.xml
 
 	```xml
 	<dependency>
@@ -138,7 +138,7 @@ Session means short duration of time execute something.On otherhand it is not us
 	   public HelloWorldRemote create() throws RemoteException,CreateException;
 	}
 	```
-4. Create ejb-jar.xml at com/javaaround/ejb/META-INF
+4. Create ejb-jar.xml at src/main/resources/META-INF
 
 	```xml
 	<?xml version="1.0"?>
@@ -159,7 +159,7 @@ Session means short duration of time execute something.On otherhand it is not us
 		</enterprise-beans>
 	</ejb-jar>
 	```
-5. Create sun-ejb-jar.xml at com/javaaround/ejb/META-INF
+5. Create sun-ejb-jar.xml at src/main/resources/META-INF
 
 	```xml
 	<!DOCTYPE sun-ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Application Server 9.0 EJB 2.0//EN" "http://www.sun.com/software/appserver/dtds/sun-ejb-jar_2_0-0.dtd">
@@ -172,7 +172,90 @@ Session means short duration of time execute something.On otherhand it is not us
 	        </ejb>
 	    </enterprise-beans>
 	</sun-ejb-jar>
-	```	
+	```
+6. package the app by following command
+	mvn clean package
+
+	upload ejb/target/EJB-1.0-SNAPSHOT.jar by glassfish administrator UI 
+
+	or by command
+
+	asadmin deploy "F:\java_tutorial\ejb/target/EJB-1.0-SNAPSHOT.jar"
+
+	for redeploy use
+
+	asadmin redeploy "F:\java_tutorial\ejb/target/EJB-1.0-SNAPSHOT.jar" 
+
+### Client App ###
+
+1. create maven java project by following command
+
+	`mvn archetype:generate -DgroupId=com.javaaround -DartifactId=EJBClient -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false` 
+2. Copy HelloWorldRemote.java &&  HelloWorldHome.java to com/javaaround/ejb
+
+3. Update App.java
+
+	```java
+	package com.javaaround;
+	import java.util.Properties;
+	import javax.naming.InitialContext;
+	import javax.naming.NamingException;
+	import com.javaaround.ejb.HelloWorldHome;
+	import com.javaaround.ejb.HelloWorldRemote;
+	public class App 
+	{
+	    public static void main( String[] args )
+	    {
+	        Properties properties = new Properties();
+			properties.setProperty("java.naming.factory.initial", "com.sun.enterprise.naming.SerialInitContextFactory");  
+			properties.setProperty("java.naming.factory.url.pkgs", "com.sun.enterprise.naming");  
+			properties.setProperty("java.naming.factory.state", "com.sun.corba.ee.impl.presentation.rmi.JNDIStateFactoryImpl");  
+			properties.setProperty("org.omg.CORBA.ORBInitialHost", "localhost");  
+			properties.setProperty("org.omg.CORBA.ORBInitialPort", "3700");  
+			  
+			try
+			{
+			    InitialContext ctx = new InitialContext( properties );
+			    HelloWorldHome home = (HelloWorldHome)ctx.lookup("java:global/EJB-1.0-SNAPSHOT/helloWorldBean!com.javaaround.ejb.HelloWorldHome");
+			    HelloWorldRemote object = home.create();
+			    System.out.println(object.hello());
+			}
+			catch (Exception e )
+			{
+			    e.printStackTrace();
+			}
+			
+	    }
+	}
+
+	```
+4. Update AppTest.java
+
+	```java
+	package com.javaaround;
+
+	import org.junit.Test;;
+
+
+	/**
+	 * Unit test for simple App.
+	 */
+	public class AppTest {
+	   @Test
+	   public void AppTest( ){
+	        App.main(null);
+	   }
+	}
+	```
+5. Update junit version at pom.xml
+
+	```xml
+	<version>4.8.1</version>
+	```
+6. Run app by following command
+
+  mvn clean package
+
 ### Types of Session Bean ###
 There are 3 types of session bean.
 1. Stateless Session Bean : 
