@@ -51,6 +51,8 @@ There was another bean before 3.0 called Entity Bean
 ### Session Bean ###
 Session means short duration of time execute something.On otherhand it is not used for persistence.It encapsulates actual business logic like user authentication,credit card validation,shopping card etc
 
+### Client of Session Bean###
+
 ### Steps to create a bean of before 2.0 style ###
 1. Create bean class with all of the business method
 2. Create two interface for the bean
@@ -90,22 +92,29 @@ Session means short duration of time execute something.On otherhand it is not us
 		     return "Hello World EJB";
 		}
 		public void ejbCreate() {
-
+			System.out.println( "Ejb create" );
 		} 
 		public void ejbRemove() {
-
+			System.out.println( "Ejb remove" );
 		}
 		public void ejbActivate() {
-
+			System.out.println( "Ejb Activate" );
 		}
 		public void ejbPassivate() {
-
+			System.out.println( "Ejb Passivate" );
 		}
 		public void setSessionContext(SessionContext sc){
-
+			System.out.println( "SessionContext" );
 		}
 	}
 	```
+
+	Explanation :
+
+	1. Bean must be extends SessionBean. it have four methods(ejbRemove(),ejbActivate(),ejbPassivate(),setSessionContext()) that must be implement
+	2. Must have ejbCreate() method . It is EJB rule but not extends from SessionBean
+	3. hello() method actual business logic
+
 3. Create HelloWorldRemote.java at com/javaaround/ejb
 
 	```java
