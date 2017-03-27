@@ -4,7 +4,7 @@
     <enterprise-beans>
         <ejb>
             <ejb-name>helloWorldBean</ejb-name>
-            <jndi-name>helloworld</jndi-name>
+            <!-- <jndi-name>helloworld</jndi-name> -->
         </ejb>
     </enterprise-beans>
 </sun-ejb-jar>

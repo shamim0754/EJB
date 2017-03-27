@@ -8,7 +8,8 @@ EJB(Enterprise java bean) is a specification provided by Sun Microsystems to dev
 5. Interceptor
 6. Timers
 7. Messaging
-8. web services support.
+8. web services support
+8. Namming service : register unique lookup name in the JNDI namespace so that client can access bean
 
 Some vendors are glashfish,Jboss,Weblogic,TomEE,WebSphere (IBM),WebLogic (BEA) etc
 
@@ -54,9 +55,9 @@ Session means short duration of time execute something.On otherhand it is not us
 ### Client of Session Bean###
 
 ### Steps to create a bean of before 2.0 style ###
-1. Create bean class with all of the business method
+1. Create bean class with all of the business method implementation
 2. Create two interface for the bean
-	1. Component Interface either local or remote
+	1. Component Interface either local or remote : 
 	2. Home Interface
 
 
@@ -81,6 +82,8 @@ Session means short duration of time execute something.On otherhand it is not us
 	```
 
 2. Create HelloWorldBean.java at com/javaaround/ejb
+
+
 
 	```java
 	package com.javaaround.ejb;
@@ -116,7 +119,7 @@ Session means short duration of time execute something.On otherhand it is not us
 	3. hello() method actual business logic
 
 3. Create HelloWorldRemote.java at com/javaaround/ejb
-
+	
 	```java
 	package com.javaaround.ejb;
 	import javax.ejb.*;
@@ -126,6 +129,16 @@ Session means short duration of time execute something.On otherhand it is not us
 	   public String hello() throws RemoteException;
 	}
 	```
+
+	Explanation : Component Interface(EJB Object): Component Interface is define the business methods that is visible to client.An EJB client never invokes an instance of enterprise bean class directly. A method invocation is intercepted by EJB COntainer that provides the services to delegate the method execution to enterprise bean at the right time.hence it is passive component managed by EJB Container.
+
+	There are two types of Component Interface
+
+	1. Remote Component : if ejb client are outside of the container then remote componet is used.you must extends `javax.ejb.EJBObject` to define remote component
+	2. Local Component : if ejb client are inside of the container then remote componet is used.you must extends `javax.ejb.EJBLocalObject` to define Local component
+
+	Here define your own busineess methods only since it is an interfaces
+
 
 	Create HelloWorldHome.java at com/javaaround/ejb
 
@@ -138,6 +151,12 @@ Session means short duration of time execute something.On otherhand it is not us
 	   public HelloWorldRemote create() throws RemoteException,CreateException;
 	}
 	```
+
+	Explanation : Home Interface(EJB Home): Home Interface is used by the client to ask for a reference  to the component interface. You think,Home as a kind of factory(home) that makes and distributes bean reference to the client
+
+	Home Interfaces contains life cycle methods of `create,find or remove`
+
+
 4. Create ejb-jar.xml at src/main/resources/META-INF
 
 	```xml
@@ -159,6 +178,13 @@ Session means short duration of time execute something.On otherhand it is not us
 		</enterprise-beans>
 	</ejb-jar>
 	```
+	Explanation : 
+		1. `<ejb-name>` : specify your ejb name that is used register with jndi 
+		2. `<home>` : specify your home interface
+		3. `<remote>` : specify your remote interface
+		4. `<ejb-class>` : specify your bean class
+		5. `<session-type>` : specify bean type either Stateless,Statefull,Singleton . discuss later
+
 5. Create sun-ejb-jar.xml at src/main/resources/META-INF
 
 	```xml
@@ -173,6 +199,11 @@ Session means short duration of time execute something.On otherhand it is not us
 	    </enterprise-beans>
 	</sun-ejb-jar>
 	```
+
+	Explanation : 
+		1. `<ejb-name>` : specify your ejb name that is configure ejb-jar.xml for register with jndi.if not specify then default name assume 
+		2. `<jndi-name>` : specify your jndi name
+
 6. package the app by following command
 	mvn clean package
 
@@ -229,6 +260,10 @@ Session means short duration of time execute something.On otherhand it is not us
 	}
 
 	```
+
+	Explanation : since it is remote(outside server) client . so we need to basic environment like ip etc
+	
+ 
 4. Update AppTest.java
 
 	```java
@@ -247,14 +282,22 @@ Session means short duration of time execute something.On otherhand it is not us
 	   }
 	}
 	```
-5. Update junit version at pom.xml
-
+5. Update junit version && add gf-client dependency(provider specific) at pom.xml
+	
 	```xml
 	<version>4.8.1</version>
 	```
+
+	```java
+	<dependency>
+        <groupId>org.glassfish.main.appclient</groupId>
+        <artifactId>gf-client</artifactId>
+        <version>4.1</version>
+    </dependency>
+	```
 6. Run app by following command
 
-  mvn clean package
+   `mvn clean package`
 
 ### Types of Session Bean ###
 There are 3 types of session bean.
