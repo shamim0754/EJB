@@ -178,8 +178,9 @@ Session means short duration of time execute something.On otherhand it is not us
 		</enterprise-beans>
 	</ejb-jar>
 	```
+
 	Explanation : 
-	
+
 		1. `<ejb-name>` : specify your ejb name that is used register with jndi 
 		2. `<home>` : specify your home interface
 		3. `<remote>` : specify your remote interface
@@ -203,11 +204,13 @@ Session means short duration of time execute something.On otherhand it is not us
 
 	Explanation : 
 
-		1. `<ejb-name>` : specify your ejb name that is configure ejb-jar.xml for register with jndi.if not specify then default name assume .See server log/console
+		1. `<ejb-name>` : specify your ejb name that is configure ejb-jar.xml for 
+		register with jndi.if not specify then default name assume .See server log/console
 		2. `<jndi-name>` : specify your jndi name
 
 6. package the app by following command
-	mvn clean package
+
+	`mvn clean package`
 
 	upload ejb/target/EJB-1.0-SNAPSHOT.jar by glassfish administrator UI 
 
