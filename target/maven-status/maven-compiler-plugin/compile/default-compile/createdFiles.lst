@@ -1,3 +1,2 @@
 com\javaaround\ejb\HelloWorldBean.class
-com\javaaround\ejb\HelloWorldHome.class
 com\javaaround\ejb\HelloWorldRemote.class

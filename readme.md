@@ -134,7 +134,7 @@ Session means short duration of time execute something.On otherhand it is not us
 
 	There are two types of Component Interface
 
-	1. Remote Component : if ejb client are outside of the container then remote componet is used.you must extends `javax.ejb.EJBObject` to define remote component
+	1. Remote Component : if ejb client are outside of the container then remote componet is used.you must extends `javax.ejb.EJBObject` to define remote component and access through the RMI-IIOP protocol.
 	2. Local Component : if ejb client are inside of the container then remote componet is used.you must extends `javax.ejb.EJBLocalObject` to define Local component
 
 	Here define your own busineess methods only since it is an interfaces
@@ -222,7 +222,7 @@ Session means short duration of time execute something.On otherhand it is not us
 
 	asadmin redeploy "F:\java_tutorial\ejb/target/EJB-1.0-SNAPSHOT.jar" 
 
-### Client App ###
+### Desktop Client App ###
 
 1. create maven java project by following command
 
@@ -303,6 +303,56 @@ Session means short duration of time execute something.On otherhand it is not us
 6. Run app by following command
 
    `mvn clean package`
+
+### Above Hello World > EJB 3.0 style ###
+It is recommend to use version 3.0 style way EJB devlopement since it is annotation based.it is introduced from jdk 5.0
+
+EJB 3.0  specification says that The requirement for Home interfaces has been eliminated. Session beans are no longer required to have home interfaces. A client may acquire a reference to a session bean directly
+
+1. Update HelloWorldRemote.java
+	```java
+	package com.javaaround.ejb;
+	import java.rmi.*;
+	import java.util.*;
+	import javax.ejb.Remote;
+	@Remote
+	public interface HelloWorldRemote{
+	   public String hello();
+	}	
+	``` 
+
+	Explanation : Component Interface(EJB Object) :
+	1. Remote Component is defined by @Remote
+	2. Local Component is defined by @Local
+
+
+2. Update HelloWorldBean.java
+	```java
+	package com.javaaround.ejb;
+	import javax.ejb.Stateless;
+	@Stateless
+	public class HelloWorldBean implements HelloWorldRemote{
+		@Override
+		public String hello(){
+		     return "Hello World EJB";
+		}
+	}	
+	``` 
+3.  Update ejb-jar.xml
+	This file is not required. it is just needed because the Maven compiles with error like it could not find a ejb-jar.xml.	
+
+	```java
+		<?xml version="1.0" encoding="UTF-8"?>  
+	<ejb-jar  
+	 xmlns="http://java.sun.com/xml/ns/javaee"  
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+	 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_0.xsd"  
+	 version="3.0">  
+	</ejb-jar>
+	```
+4. package the app by following command
+
+	`mvn clean package`
 
 ### Types of Session Bean ###
 There are 3 types of session bean.
