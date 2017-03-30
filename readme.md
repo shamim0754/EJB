@@ -1,6 +1,6 @@
 ![Image of Nested](images/EE.png) 
 
-EJB(Enterprise java bean) is a specification provided by Sun Microsystems to develop secured, robust, scalable, distributed applications.Vendors uses this specification to implement an infrastructure(EJB Container) in which components(enterprise bean is a server-side component that encapsulates the business logic of an application) can be deployed and provides set of services on that components.
+EJB(Enterprise java bean) is a specification provided by Sun Microsystems to develop secured, robust, scalable, distributed applications.Vendors uses this specification to implement an infrastructure(EJB Container) in which components(enterprise bean - is a server-side component that encapsulates the business logic of an application) can be deployed and provides set of services on that components.
 1. Transaction management 
 2. Security authorization
 3. Manages life cycle of Resource object e.g EntityManager,ejb instances thus developer needs not to worry about when to create/delete ejb objects
@@ -52,7 +52,12 @@ There was another bean before 3.0 called Entity Bean
 ### Session Bean ###
 Session means short duration of time execute something.On otherhand it is not used for persistence.It encapsulates actual business logic like user authentication,credit card validation,shopping card etc
 
-### Client of Session Bean###
+### Client of Session Bean ###
+1. Local Client : inside server
+	1. Other session bean
+	2. Web Component(Servlet,JSP,Jsf)
+
+2. Remote Client : outside server	
 
 ### Steps to create a bean of before 2.0 style ###
 1. Create bean class with all of the business method implementation
@@ -266,7 +271,7 @@ Session means short duration of time execute something.On otherhand it is not us
 
 	```
 
-	Explanation : since it is remote(outside server) client . so we need to basic environment like ip etc
+	Explanation : since it is remote(outside server) client . so we need to basic environment like ip,port etc
 
 	Glassfish register EJB beans into JNDI by following format
 	java:global/app_name/bean_name
@@ -311,7 +316,7 @@ Session means short duration of time execute something.On otherhand it is not us
 
    `mvn clean package`
 
-### Above Hello World > EJB 3.0 style ###
+### Above Hello World version >= 3.0 style ###
 It is recommend to use version 3.0 style way EJB devlopement since it is annotation based.it is introduced from jdk 5.0
 
 EJB 3.0  specification says that The requirement for Home interfaces has been eliminated. Session beans are no longer required to have home interfaces. A client may acquire a reference to a session bean directly
@@ -377,6 +382,81 @@ EJB 3.0  specification says that The requirement for Home interfaces has been el
 3. package the app by following command
 
 	`mvn clean package`	
+
+### Servlet&Jsp Client ###
+1. create java web project using maven by following command
+
+	mvn archetype:generate
+
+	Search 'maven-archetype-webapp' by edit->find(windows) . choose project no Give groupId,arctifactId(EJBServletClint) etc
+
+2. Update web.xml
+
+	```java
+	<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+			 http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	         version="3.1">
+	  <display-name>Archetype Created Web Application</display-name>
+	</web-app>
+	```
+3. create HelloWorldRemote.java at src/main/com/javaaround/ejb 
+	```java
+	package com.javaaround.ejb;
+	import java.rmi.*;
+	import java.util.*;
+	import javax.ejb.Remote;
+	@Remote
+	public interface HelloWorldRemote{
+	   public String hello();
+	}
+	```	
+4. Create TestServlet.java at src/main/com/javaaround/servlet
+
+	```java
+	package com.javaaround.servlet;
+ 
+	import java.io.*;
+	import javax.servlet.ServletException;
+	import javax.servlet.annotation.WebServlet;
+	import javax.servlet.http.HttpServlet;
+	import javax.servlet.http.HttpServletRequest;
+	import javax.servlet.http.HttpServletResponse;
+	import javax.naming.Context;
+	import javax.naming.InitialContext;
+	import javax.naming.NamingException;
+	import com.javaaround.ejb.HelloWorldRemote;
+	 
+	@WebServlet(name="TestServlet", urlPatterns={"/helloEJB"})
+	public class TestServlet extends HttpServlet {
+	    private static final long serialVersionUID = 1L;
+	    @Override
+	    protected void doGet(
+	        HttpServletRequest request, HttpServletResponse response)
+	            throws ServletException, IOException {
+	      PrintWriter out = response.getWriter();
+	      try{
+	         Context ctx = new InitialContext();
+	         HelloWorldRemote object = (HelloWorldRemote)ctx.lookup("java:global/EJB-1.0-SNAPSHOT/HelloWorldBean");
+	         out.println(object.hello());
+	      }catch(Exception e){
+
+	      }
+	     
+	    }
+	 
+	    
+	}
+	```
+
+5. package the app by following command
+
+	`mvn clean package`	
+6. Deploy App in glassfish (GLASSFISH_HOME\bin)
+asadmin deploy "F:\java_tutorial\java\JpaJavaWeb\target\JpaJavaWeb.war"	
+7. Browse App
+http://localhost:8181/EJBServletClient/helloEJB
 
 ### Types of Session Bean ###
 There are 3 types of session bean.
