@@ -354,6 +354,19 @@ EJB 3.0  specification says that The requirement for Home interfaces has been el
 
 	`mvn clean package`
 
+### Desktop Client App ###
+1. Update HelloWorldRemote.java &&  HelloWorldHome.java with the above content
+2. Update App.java
+
+	```java
+	InitialContext ctx = new InitialContext( properties );
+    HelloWorldRemote object = (HelloWorldRemote)ctx.lookup("java:global/EJB-1.0-SNAPSHOT/HelloWorldBean");
+    System.out.println(object.hello());
+	``` 
+3. package the app by following command
+
+	`mvn clean package`	
+	
 ### Types of Session Bean ###
 There are 3 types of session bean.
 1. Stateless Session Bean : 
