@@ -273,7 +273,7 @@ Session means short duration of time execute something.On otherhand it is not us
 
 	Go adminstrator login : Server(Admin Server) -> view log files->Portable JNDI names for EJB HelloWorldBean->details
 
-	![Image of Nested](images/1.png) 
+	![Image of Nested](images/2.png) 
 
  
 4. Update AppTest.java
