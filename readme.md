@@ -205,7 +205,7 @@ Session means short duration of time execute something.On otherhand it is not us
 	Explanation : 
 
 		1. `<ejb-name>` : specify your ejb name that is configure ejb-jar.xml for 
-		register with jndi.if not specify then default name assume .See server log/console
+		register with jndi.if not specify then bean name is used to register .See server log/console
 		2. `<jndi-name>` : specify your jndi name
 
 6. package the app by following command
@@ -267,6 +267,9 @@ Session means short duration of time execute something.On otherhand it is not us
 	```
 
 	Explanation : since it is remote(outside server) client . so we need to basic environment like ip etc
+
+	Glassfish register EJB beans into JNDI by following format
+	java:global/app_name/bean_name
 
  
 4. Update AppTest.java
@@ -338,6 +341,10 @@ EJB 3.0  specification says that The requirement for Home interfaces has been el
 		}
 	}	
 	``` 
+
+	Explanation : Acutual enterprise bean . Mark it @Stateless,@Stateful or @SingleTon
+	if you register the bean with certain name into JNDI then @Stateless(name="testBean")
+
 3.  Update ejb-jar.xml
 	This file is not required. it is just needed because the Maven compiles with error like it could not find a ejb-jar.xml.	
 
@@ -366,7 +373,7 @@ EJB 3.0  specification says that The requirement for Home interfaces has been el
 3. package the app by following command
 
 	`mvn clean package`	
-	
+
 ### Types of Session Bean ###
 There are 3 types of session bean.
 1. Stateless Session Bean : 
