@@ -271,6 +271,10 @@ Session means short duration of time execute something.On otherhand it is not us
 	Glassfish register EJB beans into JNDI by following format
 	java:global/app_name/bean_name
 
+	Go adminstrator login : Server(Admin Server) -> view log files->Portable JNDI names for EJB HelloWorldBean->details
+
+	![Image of Nested](images/1.png) 
+
  
 4. Update AppTest.java
 
