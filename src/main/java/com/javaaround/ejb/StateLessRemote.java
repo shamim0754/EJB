@@ -4,5 +4,5 @@ import java.util.*;
 import javax.ejb.Remote;
 @Remote
 public interface StateLessRemote{
-   public int getData();
+   public boolean isNumber(String phone);
 }

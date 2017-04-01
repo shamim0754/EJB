@@ -504,3 +504,47 @@ When the method is finished, , the client-specific state should not be retained(
 	2. InventoryCheck
 	3. EmailSent
 	4. CreditCard validate
+
+
+### Demo On stateless ###
+
+1. Create StateLessRemote.java
+
+	```java
+	package com.javaaround.ejb;
+	import java.rmi.*;
+	import java.util.*;
+	import javax.ejb.Remote;
+	@Remote
+	public interface StateLessRemote{
+	   public boolean isNumber(String phone);
+	}
+	```	
+
+2. Create StateLessBean.java
+
+	```java
+	package com.javaaround.ejb;
+	import javax.ejb.Stateless;
+	import javax.annotation.PostConstruct;
+	@Stateless
+	public class StateLessBean implements StateLessRemote{
+		
+		@Override
+		public boolean isNumber(String phone){
+			return phone.matches("[0-9]+");
+		}
+	}
+	```	
+3. Update TestServlet.java
+	```java
+	try{
+		 Context ctx = new InitialContext();
+		 StateLessRemote object = (StateLessRemote)ctx.lookup("java:global/EJB-1.0-SNAPSHOT/StateLessBean");
+		 out.println("valid : " + object.isNumber("015555555"));
+	}catch(Exception e){
+
+	}
+	```
+	
+![Image of Nested](images/4.png) 
