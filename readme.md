@@ -401,7 +401,7 @@ EJB 3.0  specification says that The requirement for Home interfaces has been el
 	  <display-name>Archetype Created Web Application</display-name>
 	</web-app>
 	```
-3. create HelloWorldRemote.java at src/main/com/javaaround/ejb 
+3. Copy HelloWorldRemote.java to src/main/com/javaaround/ejb 
 	```java
 	package com.javaaround.ejb;
 	import java.rmi.*;
@@ -449,17 +449,57 @@ EJB 3.0  specification says that The requirement for Home interfaces has been el
 	    
 	}
 	```
+5. Create testEjb.jsp(usage at jsp page)
 
-5. package the app by following command
+	```jsp
+	<%@ page contentType="text/html; charset=UTF-8" %>
+	<%@ page import="com.javaaround.ejb.*,
+	 javax.naming.*"%>
+
+	 <%
+	   try{
+	     Context ctx = new InitialContext();
+	     HelloWorldRemote object = (HelloWorldRemote)ctx.lookup("java:global/EJB-1.0-SNAPSHOT/HelloWorldBean");
+	     out.println(object.hello());
+	  }catch(Exception e){
+
+	  }
+	  
+	%>
+	```
+6. package the app by following command
 
 	`mvn clean package`	
-6. Deploy App in glassfish (GLASSFISH_HOME\bin)
-asadmin deploy "F:\java_tutorial\java\JpaJavaWeb\target\JpaJavaWeb.war"	
-7. Browse App
-http://localhost:8181/EJBServletClient/helloEJB
+7. Deploy App in glassfish (GLASSFISH_HOME\bin)
 
+asadmin deploy "F:\java_tutorial\java\JpaJavaWeb\target\JpaJavaWeb.war"	
+8. Browse App
+http://localhost:8181/EJBServletClient/helloEJB
+http://localhost:8181/EJBServletClient/testEjb.jsp
 ### Types of Session Bean ###
 There are 3 types of session bean.
+
 1. Stateless Session Bean : 
+2. Stateful Session Bean
+3. Singleton Session Bean
 
+### Stateless Session Bean ###
 
+It doesn't maintain state(values of its instance variables) of a client between multiple method calls.
+
+![Image of Nested](images/3.png) 
+
+Server maintain pool of stateless session of specific type. When a client invokes the methods of a stateless bean,then it randomly pick any bean from pool(thus instance value different althogh same client)
+When the method is finished, , the client-specific state should not be retained(very short time session)
+
+### Advantage Stateless ###
+
+1. Because they can support multiple clients, stateless session beans can offer better scalability for applications that require large numbers of clients. Typically, an application requires fewer stateless session beans than stateful session beans to support the same number of clients.
+
+### Use case Stateless ###
+
+1. Each request is different means you don't require anything to store on server.e.g
+	1. ValidateUser
+	2. InventoryCheck
+	3. EmailSent
+	4. CreditCard validate
