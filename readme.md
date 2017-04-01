@@ -401,13 +401,12 @@ EJB 3.0  specification says that The requirement for Home interfaces has been el
 	  <display-name>Archetype Created Web Application</display-name>
 	</web-app>
 	```
-3. Copy HelloWorldRemote.java to src/main/com/javaaround/ejb 
+3. Create HelloWorldRemote.java to src/main/com/javaaround/ejb 
 	```java
 	package com.javaaround.ejb;
 	import java.rmi.*;
 	import java.util.*;
 	import javax.ejb.Remote;
-	@Remote
 	public interface HelloWorldRemote{
 	   public String hello();
 	}
@@ -473,8 +472,10 @@ EJB 3.0  specification says that The requirement for Home interfaces has been el
 7. Deploy App in glassfish (GLASSFISH_HOME\bin)
 
 asadmin deploy "F:\java_tutorial\java\JpaJavaWeb\target\JpaJavaWeb.war"	
+
 8. Browse App
-http://localhost:8181/EJBServletClient/helloEJB
+
+http://localhost:8181/EJBServletClient/helloEJB<br>
 http://localhost:8181/EJBServletClient/testEjb.jsp
 ### Types of Session Bean ###
 There are 3 types of session bean.
