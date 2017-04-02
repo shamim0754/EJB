@@ -490,8 +490,10 @@ It doesn't maintain state(values of its instance variables) of a client between 
 
 ![Image of Nested](images/3.png) 
 
-Server maintain pool of stateless session of specific type. When a client invokes the methods of a stateless bean,then it randomly pick any bean from pool(thus instance value different althogh same client)
-When the method is finished, , the client-specific state should not be retained(very short time session)
+Server maintain pool of stateless session of specific type. When a client invokes the methods of a stateless bean,then it randomly pick any bean from pool.That means if the client does two subsequent requests it is possible that two different instances of the stateless bean serve the requests(thus instance value different althogh same client).
+
+
+if the client disappears, the stateless bean does not get destroyed and can serve the next request from another client
 
 ### Advantage Stateless ###
 
@@ -547,4 +549,17 @@ When the method is finished, , the client-specific state should not be retained(
 	}
 	```
 	
+### Output ###
+
 ![Image of Nested](images/4.png) 
+
+### Stateful Session Bean ###
+
+Each instance is created and bounded to a single client and serves only requests from that particular client.At the end of the lifecyle the client calls a remove method and the bean is being destroyed/ready for garbage collection.
+
+### Use case Stateful ###
+
+1. Each request is different means you don't require anything to store on server.e.g
+	1. count how many requses of a bean
+	2. Shopping cart
+	3. login user display
