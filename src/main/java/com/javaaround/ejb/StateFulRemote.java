@@ -3,6 +3,7 @@ import java.rmi.*;
 import java.util.*;
 import javax.ejb.Remote;
 @Remote
-public interface StateLessRemote{
-   public boolean isNumber(String phone);
+public interface StateFulRemote{
+   public int accessCount();
+   public void increment();
 }

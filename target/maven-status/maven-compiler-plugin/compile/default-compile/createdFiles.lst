@@ -1,4 +1,4 @@
 com\javaaround\ejb\HelloWorldBean.class
-com\javaaround\ejb\StateLessRemote.class
-com\javaaround\ejb\StateLessBean.class
+com\javaaround\ejb\StateFulBean.class
 com\javaaround\ejb\HelloWorldRemote.class
+com\javaaround\ejb\StateFulRemote.class

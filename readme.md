@@ -448,6 +448,17 @@ EJB 3.0  specification says that The requirement for Home interfaces has been el
 	    
 	}
 	```
+
+	Explanation:
+
+	1. you can 3.0 style dependency instead old lookup
+
+	```java
+	import javax.ejb.EJB;
+ 
+	@EJB
+	HelloWorldRemote object;
+	```
 5. Create testEjb.jsp(usage at jsp page)
 
 	```jsp
@@ -555,11 +566,11 @@ if the client disappears, the stateless bean does not get destroyed and can serv
 
 ### Stateful Session Bean ###
 
-Each instance is created and bounded to a single client and serves only requests from that particular client.At the end of the lifecyle the client calls a remove method and the bean is being destroyed/ready for garbage collection.
+Each instance is created and bounded to a single client and serves only requests from that particular client.At the end of the lifecyle the client calls a remove method and the bean is being destroyed.
 
 ### Use case Stateful ###
 
-1. Each request is different means you don't require anything to store on server.e.g
+1. Each request need store data (state) on server.e.g
 	1. count how many requses of a bean
 	2. Shopping cart
 	3. login user display
