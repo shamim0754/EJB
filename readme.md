@@ -451,7 +451,7 @@ EJB 3.0  specification says that The requirement for Home interfaces has been el
 
 	Explanation:
 
-	1. you can 3.0 style dependency instead old lookup
+	1. you can 3.0 style dependency(recommened) instead old lookup
 
 	```java
 	import javax.ejb.EJB;
@@ -518,8 +518,9 @@ if the client disappears, the stateless bean does not get destroyed and can serv
 	3. EmailSent
 	4. CreditCard validate
 
-
 ### Demo On stateless ###
+
+### Practical Demo On stateless ###
 
 1. Create StateLessRemote.java
 
@@ -551,9 +552,9 @@ if the client disappears, the stateless bean does not get destroyed and can serv
 	```	
 3. Update TestServlet.java
 	```java
+	@EJB
+	StateLessRemote object;
 	try{
-		 Context ctx = new InitialContext();
-		 StateLessRemote object = (StateLessRemote)ctx.lookup("java:global/EJB-1.0-SNAPSHOT/StateLessBean");
 		 out.println("valid : " + object.isNumber("015555555"));
 	}catch(Exception e){
 
@@ -574,3 +575,70 @@ Each instance is created and bounded to a single client and serves only requests
 	1. count how many requses of a bean
 	2. Shopping cart
 	3. login user display
+
+
+### Demo on Stateful ###
+
+1. Create StateFulRemote.java
+
+	```java
+	package com.javaaround.ejb;
+	import java.rmi.*;
+	import java.util.*;
+	import javax.ejb.Remote;
+	@Remote
+	public interface StateFulRemote{
+	   public int accessCount();
+	}
+	```
+
+2. Create StateFulBean.java
+
+	```java
+	package com.javaaround.ejb;
+	import javax.ejb.Stateful;
+	import javax.annotation.PostConstruct;
+	@Stateful
+	public class StateFulBean implements StateFulRemote{
+		public int count=1;
+		@Override
+		public int accessCount(){
+			this.count++;
+			return this.count;
+		}
+		
+	}
+	```
+3. Update TestServlet.java
+
+```java
+ @EJB
+StateFulRemote object;
+@Override
+protected void doGet(
+    HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+  PrintWriter out = response.getWriter();
+  try{
+     
+     out.println("You access bean " + object.accessCount() + "times");
+  }catch(Exception e){
+
+  }
+ 
+}
+```
+
+
+With EJB 3.1, the requirement for local interfaces was dropped. No need to write them unless you explicitly need them.
+
+What is the best way to inject one EJB into another one?
+Couple of things to write here:
+
+With Java EE 6, Java Enterprise has changed. A new JSR defines a so-called managed bean (don't confuse with JSF managed beans) as a sort of minimum component that can still benefit from the container in terms of dependency injection and lifecycle management. This means: If you have a component and "just" want to use DI and let the container control its lifecycle, you do not need to use EJBs for it. You'll end up using EJBs if - and only if - you explicitly need EJB functionality like transaction handling, pooling, passivation and clustering.
+
+This makes the answer to your question come in three parts:
+
+Use @Inject over @EJB, the concept of CDI (a) works for all managed beans (this includes EJBs) and (b) is stateful and therefore far superior over pure @EJB DI
+Are you sure that you need EJBs for your components?
+It's definitely worthwhile to have a look at the CDI

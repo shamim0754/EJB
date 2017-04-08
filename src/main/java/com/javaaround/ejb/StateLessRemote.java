@@ -3,7 +3,6 @@ import java.rmi.*;
 import java.util.*;
 import javax.ejb.Remote;
 @Remote
-public interface StateFulRemote{
+public interface StateLessRemote{
    public int accessCount();
-   public void increment();
 }

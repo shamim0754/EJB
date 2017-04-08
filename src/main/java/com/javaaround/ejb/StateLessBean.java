@@ -2,14 +2,12 @@ package com.javaaround.ejb;
 import javax.ejb.Stateful;
 import javax.annotation.PostConstruct;
 @Stateful
-public class StateFulBean implements StateFulRemote{
+public class StateLessBean implements StateLessRemote{
 	public int count=1;
 	@Override
 	public int accessCount(){
-		return count;
+		this.count++;
+		return this.count;
 	}
-	@Override
-	public void increment() {
-        this.count++;
-    }
+	
 }
